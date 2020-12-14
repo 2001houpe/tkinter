@@ -13,6 +13,11 @@ class Application(tk.Tk):
         super().__init__(className=self.name)
         self.title(self.name)
         self.bind("<Escape>", self.quit)
+        self. varR = StringVar()
+        self.varR.set(0)
+        self.varR.trace("w", self.entryUpdate)
+        self.entryR = Entry(textvariable = self.varR)
+        self.entryR.pack()
         self.scaleR = tk.Scale (from_=0, to=255, orient=HORIZONTAL,background = "#ff0000",command = self.change ,length=self.length)
         self.scaleR.pack()
 
@@ -28,9 +33,24 @@ class Application(tk.Tk):
         self.varColor = StringVar()
         self.entryColor = Entry(textvariable = self.varColor, width = 7)
         self.entryColor.pack()
+
+    
+    
+    def entryUpdate(self, name, index, operations):
+        r = self.varR.get()
+        if r.isdigit():
+            r = int(r)
+        else:
+            self.varR.set(0)
+            r =0
+        self.scaleR.set(r)
+    
+        
+    
     
     def change(self , event):
         r = self.scaleR.get()
+        self.varR.set(r)
         g = self.scaleG.get()
         b = self.scaleB.get()
         hashcolor = "#%02x%02x%02x" % (r, g, b)
